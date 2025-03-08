@@ -9,7 +9,10 @@ const registerUser = async (req, res, next) => {
   }
 
   const { fullname, email, password } = req.body;
-
+  const isUserAlrreadyExist = await userModel.findOne({ email });
+  if (isUserAlrreadyExist) {
+    return res.status(400).json({ message: "User Already Exist" });
+  }
   const hashPassword = await userModel.hashPassword(password);
 
   const user = await userService.createUser({
@@ -29,10 +32,6 @@ const loginUser = async (req, res, next) => {
 
   const { email, password } = req.body;
 
-  const isUserAlrreadyExist = await userModel.findOne({ email });
-  if (isUserAlrreadyExist) {
-    return res.status(400).json({ message: "User Already Exist" });
-  }
   const user = await userModel.findOne({ email }).select("+password");
 
   if (!user) {
@@ -54,8 +53,8 @@ const getUserProfile = async (req, res, next) => {
 };
 
 const logoutuser = async (req, res, next) => {
-  res.clearCookie("token");
   const token = req.cookies.token || req.headers.authorization?.split("")[1];
+  res.clearCookie("token");
   await blackListTokenModel.create({ token });
   res.status(200).json({ message: "Logged out" });
 };
