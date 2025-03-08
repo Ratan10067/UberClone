@@ -28,6 +28,11 @@ const loginUser = async (req, res, next) => {
   }
 
   const { email, password } = req.body;
+
+  const isUserAlrreadyExist = await userModel.findOne({ email });
+  if (isUserAlrreadyExist) {
+    return res.status(400).json({ message: "User Already Exist" });
+  }
   const user = await userModel.findOne({ email }).select("+password");
 
   if (!user) {
