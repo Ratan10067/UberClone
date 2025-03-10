@@ -49,14 +49,14 @@ const loginUser = async (req, res, next) => {
 };
 
 const getUserProfile = async (req, res, next) => {
-  return res.status(200).json(req.user);
+  return res.status(200).json({ user: req.user });
 };
 
 const logoutuser = async (req, res, next) => {
   const token = req.cookies.token || req.headers.authorization?.split("")[1];
   res.clearCookie("token");
   await blackListTokenModel.create({ token });
-  res.status(200).json({ message: "Logged out" });
+  return res.status(200).json({ message: "Logged out" });
 };
 module.exports = {
   registerUser,

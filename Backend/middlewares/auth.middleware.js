@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const blackListTokenModel = require("../models/blacklistToken.model");
 const capatainModel = require("../models/captain.model");
-const { use } = require("../routes/user.routes");
 const authUser = async (req, res, next) => {
   const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
   if (!token) {
