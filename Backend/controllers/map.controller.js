@@ -46,7 +46,7 @@ const getDistanceTime = async (req, res) => {
   }
 };
 const getAutoCompleteSuggestions = async (req, res) => {
-//   console.log("Received Query:", req.query); // ✅ Debugging Step
+  console.log("Received Query:", req.query); // ✅ Debugging Step
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
