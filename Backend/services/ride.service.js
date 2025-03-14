@@ -57,7 +57,6 @@ function getOtp(num) {
 module.exports.createRide = async ({
   user,
   pickup,
-  otp,
   destination,
   vehicleType,
 }) => {

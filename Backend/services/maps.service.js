@@ -41,38 +41,32 @@ const getDistanceTime = async (origin, destination) => {
   if (!origin || !destination) {
     throw new Error("Origin and Destination are required");
   }
-
+  const originCoordinates = await getAddressCoordinates(origin);
+  const destinationCoordinates = await getAddressCoordinates(destination);
+  console.log(originCoordinates, destinationCoordinates);
   const options = {
     method: "GET",
-    url: "https://google-map-places.p.rapidapi.com/maps/api/distancematrix/json",
+    url: "https://trueway-matrix.p.rapidapi.com/CalculateDrivingMatrix",
     params: {
-      origins: origin,
-      destinations: destination,
-      transit_routing_preference: "less_walking",
-      traffic_model: "pessimistic",
-      avoid: "highways",
-      language: "en",
-      departure_time: "1782624107",
-      mode: "driving",
-      transit_mode: "train|tram|subway",
-      units: "metric",
-      region: "en",
+      origins: originCoordinates.lat + "," + originCoordinates.lng,
+      destinations:
+        destinationCoordinates.lat + "," + destinationCoordinates.lng,
     },
     headers: {
       "x-rapidapi-key": "1b50c68d2cmsha8692b8438e3a26p167c82jsn01d33b01cd37",
-      "x-rapidapi-host": "google-map-places.p.rapidapi.com",
+      "x-rapidapi-host": "trueway-matrix.p.rapidapi.com",
     },
   };
 
   try {
     const response = await axios.request(options);
-    console.log("Google Maps API Response:", response.data);
+    console.log("Distance Matrix API Response:", response.data);
 
-    if (response.data.status === "OK") {
-      if (response.data.rows[0].elements[0].status === "ZERO_RESULTS") {
-        throw new Error("No results found");
-      }
-      return response.data.rows[0].elements[0];
+    if (response.data.distances && response.data.durations) {
+      return {
+        distance: response.data.distances[0][0], // Extracting distance correctly
+        duration: response.data.durations[0][0], // Extracting duration correctly
+      };
     } else {
       throw new Error("Error fetching distance and time");
     }
