@@ -30,24 +30,24 @@ async function getFare(pickup, destination) {
   const fare = {
     auto: Math.round(
       baseFare.auto +
-        (distanceTime.distance.value / 1000) * perKmRate.auto +
-        (distanceTime.duration.value / 60) * perMinuteRate.auto
+        (distanceTime.distance / 1000) * perKmRate.auto +
+        (distanceTime.duration / 60) * perMinuteRate.auto
     ),
     car: Math.round(
       baseFare.car +
-        (distanceTime.distance.value / 1000) * perKmRate.car +
-        (distanceTime.duration.value / 60) * perMinuteRate.car
+        (distanceTime.distance / 1000) * perKmRate.car +
+        (distanceTime.duration / 60) * perMinuteRate.car
     ),
     moto: Math.round(
       baseFare.moto +
-        (distanceTime.distance.value / 1000) * perKmRate.moto +
-        (distanceTime.duration.value / 60) * perMinuteRate.moto
+        (distanceTime.distance / 1000) * perKmRate.moto +
+        (distanceTime.duration / 60) * perMinuteRate.moto
     ),
   };
 
   return fare;
 }
-
+module.exports.getFare = getFare;
 function getOtp(num) {
   const otp = crypto
     .randomInt(Math.pow(10, num - 1), Math.pow(10, num))
@@ -64,12 +64,13 @@ module.exports.createRide = async ({
     throw new Error("All Fields are Required");
   }
   const fare = await getFare(pickup, destination);
+  console.log("Fare:", fare);
   const ride = rideModel.create({
     user,
     pickup,
     otp: getOtp(6),
     destination,
-    fare: fare.vehicleType,
+    fare: fare[vehicleType],
   });
   return ride;
 };

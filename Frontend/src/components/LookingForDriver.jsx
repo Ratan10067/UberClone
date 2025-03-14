@@ -1,6 +1,12 @@
 import React from "react";
 
-const LookingForDriver = ({ setVehicleFound }) => {
+const LookingForDriver = ({
+  pickUp,
+  destination,
+  fare,
+  vehicleType,
+  setVehicleFound,
+}) => {
   return (
     <div>
       <h5
@@ -21,20 +27,20 @@ const LookingForDriver = ({ setVehicleFound }) => {
             <i className="ri-user-location-fill"></i>
             <div>
               <h3 className="text-lg font-medium">526/11-A</h3>
-              <p className="text-base text-gray-700">IIT KHARAGPUR</p>
+              <p className="text-base text-gray-700">{pickUp}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 border-b-2 border-gray-300">
             <i className="ri-map-pin-fill"></i>
             <div>
               <h3 className="text-lg font-medium">526/11-A</h3>
-              <p className="text-base text-gray-700">IIT KHARAGPUR</p>
+              <p className="text-base text-gray-700">{destination}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 ">
             <i className="ri-cash-fill"></i>
             <div>
-              <h3 className="text-lg font-medium">₹193.20</h3>
+              <h3 className="text-lg font-medium">₹{fare.vehicleType}</h3>
               <p className="text-base text-gray-700">Cash</p>
             </div>
           </div>

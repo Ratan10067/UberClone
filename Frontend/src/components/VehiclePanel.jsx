@@ -1,6 +1,11 @@
 import React from "react";
 
-const VehiclePanel = ({ setVehiclePanel, setConfirmedRidePanel }) => {
+const VehiclePanel = ({
+  setVehiclePanel,
+  setConfirmedRidePanel,
+  fare,
+  setVehicleType,
+}) => {
   return (
     <div>
       <h5
@@ -13,6 +18,7 @@ const VehiclePanel = ({ setVehiclePanel, setConfirmedRidePanel }) => {
       <div
         onClick={() => {
           setConfirmedRidePanel(true);
+          setVehicleType("car");
         }}
         className="flex border-2 active:border-black rounded-2xl items-center w-full p-3 justify-between mb-2"
       >
@@ -33,11 +39,12 @@ const VehiclePanel = ({ setVehiclePanel, setConfirmedRidePanel }) => {
             Affordable, compact rides
           </p>
         </div>
-        <h2 className="text-2xl font-semibold">₹194.20</h2>
+        <h2 className="text-2xl font-semibold">₹{fare.car}</h2>
       </div>
       <div
         onClick={() => {
           setConfirmedRidePanel(true);
+          setVehicleType("moto");
         }}
         className="flex border-2 active:border-black rounded-2xl items-center w-full p-3 justify-between mb-2"
       >
@@ -58,11 +65,12 @@ const VehiclePanel = ({ setVehiclePanel, setConfirmedRidePanel }) => {
             Affordable, Motor-Cycle rides
           </p>
         </div>
-        <h2 className="text-2xl font-semibold">₹66.20</h2>
+        <h2 className="text-2xl font-semibold">₹{fare.moto}</h2>
       </div>
       <div
         onClick={() => {
           setConfirmedRidePanel(true);
+          setVehicleType("auto");
         }}
         className="flex border-2 active:border-black rounded-2xl items-center w-full p-3 justify-between mb-2"
       >
@@ -83,7 +91,7 @@ const VehiclePanel = ({ setVehiclePanel, setConfirmedRidePanel }) => {
             Affordable, compact rides
           </p>
         </div>
-        <h2 className="text-2xl font-semibold">₹118.25</h2>
+        <h2 className="text-2xl font-semibold">₹{fare.auto}</h2>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const connectDB = require("./db/db");
 const mapsRoutes = require("./routes/maps.routes");
+const rideRoutes = require("./routes/ride.routes");
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -58,6 +59,7 @@ app.get("/check", (req, res) => {
 app.use("/users", userRoutes);
 app.use("/captains", captainRoutes);
 app.use("/maps", mapsRoutes);
+app.use("/rides", rideRoutes);
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
