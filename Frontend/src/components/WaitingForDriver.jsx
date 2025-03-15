@@ -1,6 +1,6 @@
 import React from "react";
 
-const WaitingForDriver = ({ waitingForDriver }) => {
+const WaitingForDriver = ({ waitingForDriver, ride }) => {
   return (
     <div>
       <h5
@@ -16,32 +16,36 @@ const WaitingForDriver = ({ waitingForDriver }) => {
           alt=""
         />
         <div className="text-right">
-          <h2 className="text-lg font-medium">Ratan</h2>
-          <h4 className="text-xl font-semibold">BR 2025</h4>
+          <h2 className="text-lg font-medium capitalize">
+            {ride?.captain.fullname.firstname}
+          </h2>
+          <h4 className="text-xl font-semibold">
+            {ride?.captain.vehicle.plate}
+          </h4>
           <p className="text-sm text-gray-600">Mercedez</p>
+          <h2 className="text-lg font-semibold">{ride?.otp}</h2>
         </div>
       </div>
-
       <div className="flex gap-2 justify-between flex-col items-center">
         <div className="w-full mt-5">
           <div className="flex items-center gap-5 p-3 border-b-2 border-gray-300">
             <i className="ri-user-location-fill"></i>
             <div>
               <h3 className="text-lg font-medium">526/11-A</h3>
-              <p className="text-base text-gray-700">IIT KHARAGPUR</p>
+              <p className="text-base text-gray-700">{ride?.pickup}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 border-b-2 border-gray-300">
             <i className="ri-map-pin-fill"></i>
             <div>
               <h3 className="text-lg font-medium">526/11-A</h3>
-              <p className="text-base text-gray-700">IIT KHARAGPUR</p>
+              <p className="text-base text-gray-700">{ride?.destination}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 ">
             <i className="ri-cash-fill"></i>
             <div>
-              <h3 className="text-lg font-medium">₹193.20</h3>
+              <h3 className="text-lg font-medium">₹{ride?.fare}</h3>
               <p className="text-base text-gray-700">Cash</p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-const RidePopUp = ({ setRidePopUpPanel, setConfirmedRidePopUpPanel }) => {
+const RidePopUp = ({ setRidePopUpPanel, setConfirmedRidePopUpPanel, ride }) => {
   return (
     <div>
       <h5
@@ -17,7 +17,9 @@ const RidePopUp = ({ setRidePopUpPanel, setConfirmedRidePopUpPanel }) => {
             src="https://www.svgrepo.com/show/382106/male-avatar-boy-face-man-user-9.svg"
             alt=""
           />
-          <h2 className="text-xl font-medium">Ratan Kumar</h2>
+          <h2 className="text-xl font-medium">
+            {ride?.user.fullname.firstname + ride?.user.fullname.lastname}
+          </h2>
         </div>
         <h5 className="text-lg font-semibold">2.2KM</h5>
       </div>
@@ -27,20 +29,20 @@ const RidePopUp = ({ setRidePopUpPanel, setConfirmedRidePopUpPanel }) => {
             <i className="ri-user-location-fill"></i>
             <div>
               <h3 className="text-lg font-medium">526/11-A</h3>
-              <p className="text-base text-gray-700">IIT KHARAGPUR</p>
+              <p className="text-base text-gray-700">{ride?.pickup}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 border-b-2 border-gray-300">
             <i className="ri-map-pin-fill"></i>
             <div>
               <h3 className="text-lg font-medium">526/11-A</h3>
-              <p className="text-base text-gray-700">IIT KHARAGPUR</p>
+              <p className="text-base text-gray-700">{ride?.destination}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 ">
             <i className="ri-cash-fill"></i>
             <div>
-              <h3 className="text-lg font-medium">₹193.20</h3>
+              <h3 className="text-lg font-medium">₹{ride?.fare}</h3>
               <p className="text-base text-gray-700">Cash</p>
             </div>
           </div>

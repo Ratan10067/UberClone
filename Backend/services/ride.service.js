@@ -2,6 +2,7 @@ const { get } = require("http");
 const rideModel = require("../models/ride.model");
 const mapsService = require("./maps.service");
 const crypto = require("crypto");
+const { sendMessageToSocketId } = require("../socket");
 async function getFare(pickup, destination) {
   if (!pickup || !destination) {
     throw new Error("Pickup and destination are required");
@@ -72,5 +73,93 @@ module.exports.createRide = async ({
     destination,
     fare: fare[vehicleType],
   });
+  return ride;
+};
+
+module.exports.confirmRide = async ({ rideId, captain }) => {
+  if (!rideId) throw new Error("Ride Id is Required");
+  await rideModel.findOneAndUpdate(
+    { _id: rideId },
+    {
+      status: "accepted",
+      captain: captain._id,
+    }
+  );
+  const ride = await rideModel
+    .findOne({
+      _id: rideId,
+    })
+    .populate("user")
+    .populate("captain")
+    .select("+otp");
+  if (!ride) throw new error("ride not found");
+  return ride;
+};
+
+module.exports.startRide = async ({ rideId, otp, captain }) => {
+  if (!rideId || !otp) {
+    throw new Error("RideId and OTP is required");
+  }
+  const ride = await rideModel
+    .findOne({
+      _id: rideId,
+    })
+    .populate("user")
+    .populate("captain")
+    .select("+otp");
+
+  if (!ride) {
+    throw new Error("All fields are required");
+  }
+
+  if (ride.status !== "accepted") {
+    throw new Error("Ride not accepted");
+  }
+
+  if (ride.otp !== otp) {
+    throw new Error("Invalid Otp");
+  }
+
+  await rideModel.findOneAndUpdate(
+    {
+      _id: rideId,
+    },
+    {
+      status: "ongoing",
+    }
+  );
+  sendMessageToSocketId(ride.user.socketId, {
+    event: "ride-started",
+    data: ride,
+  });
+  return ride;
+};
+
+module.exports.endRide = async ({ rideId, captain }) => {
+  if (!rideId) {
+    throw new Error("RideId is Required");
+  }
+
+  const ride = await rideModel
+    .findOne({
+      _id: rideId,
+      captain: captain._id,
+    })
+    .populate("captain")
+    .populate("user")
+    .select("+otp");
+  if (!ride) throw new Error("Ride not found");
+  if (ride.status !== "ongoing") {
+    throw new Error("Ride not ongoing");
+  }
+
+  await rideModel.findOneAndUpdate(
+    {
+      _id: rideId,
+    },
+    {
+      status: "completed",
+    }
+  );
   return ride;
 };

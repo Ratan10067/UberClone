@@ -36,8 +36,8 @@ const CaptainSignup = () => {
       );
       if (response.status === 201) {
         const data = response.data;
+        console.log("API Response:", data.captain);
         setCaptain(data.captain);
-        // console.log("API Response:", response.data);
         localStorage.setItem("token", data.token);
         navigate("/captain-home");
       }

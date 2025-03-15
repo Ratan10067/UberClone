@@ -1,5 +1,5 @@
 const axios = require("axios");
-
+const captainModel = require("../models/captain.model");
 const getAddressCoordinates = async (address) => {
   if (!address) {
     throw new Error("Address parameter is required"); // ❌ Do NOT use res.status() in service
@@ -106,7 +106,17 @@ const getAutoCompleteSuggestions = async (input) => {
     throw error;
   }
 };
-
+const getCaptainsInTheRadius = async (ltd, lng, radius) => {
+  // Here radius is in Km
+  const captains = await captainModel.find({
+    location: {
+      $geoWithin: {
+        $centerSphere: [[ltd, lng], radius / 6371],
+      },
+    },
+  });
+  return captains;
+};
 module.exports = {
   getAddressCoordinates,
   getDistanceTime,

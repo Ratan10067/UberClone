@@ -1,8 +1,8 @@
 import React, { createContext, useState } from "react";
 
-export const UserContext = createContext(); 
+export const UserDataContext = createContext();
 
-const UserProvider = ({ children }) => {
+const UserContext = ({ children }) => {
   const [user, setUser] = useState({
     email: "",
     fullName: {
@@ -12,10 +12,10 @@ const UserProvider = ({ children }) => {
   });
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserDataContext.Provider value={{ user, setUser }}>
       {children}
-    </UserContext.Provider>
+    </UserDataContext.Provider>
   );
 };
 
-export default UserProvider; 
+export default UserContext;

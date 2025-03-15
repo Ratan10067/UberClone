@@ -6,7 +6,6 @@ export const CaptainDataContext = createContext();
 // Create a provider component
 const CaptainContext = ({ children }) => {
   const [captain, setCaptain] = useState({});
-
   return (
     <CaptainDataContext.Provider value={{ captain, setCaptain }}>
       {children}
