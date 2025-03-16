@@ -4,13 +4,14 @@ const mapsService = require("../services/maps.service");
 const { sendMessageToSocketId } = require("../socket");
 const rideModel = require("../models/ride.model");
 module.exports.createRide = async (req, res) => {
+  console.log("📢 createRide function started");
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-
+  console.log("createRide me aagya hu");
   const { pickup, destination, vehicleType } = req.body;
-  //   console.log(req);
+  console.log(pickup, " ", destination, " ", vehicleType);
   try {
     const ride = await rideService.createRide({
       user: req.user._id,
@@ -25,17 +26,25 @@ module.exports.createRide = async (req, res) => {
       pickUpCoordinates.lng,
       2
     );
+    console.log("createRide me aagya hu1233");
     ride.otp = "";
     const rideWithUser = await rideModel
-      .findOne({ id: ride._id })
+      .findOne({ _id: ride._id })
       .populate("user");
+    console.log("rideWithUser bhai suno", rideWithUser);
+    console.log("captainsInRadius", captainsInRadius);
+
+    // console.log("captain.socketId1", captain.socketId);
     captainsInRadius.map((captain) => {
+      console.log("captain.socketId2", captain.socketId);
       sendMessageToSocketId(captain.socketId, {
         event: "new-ride",
         data: rideWithUser,
       });
     });
+    console.log("createRide me aagya huhbhiuoi");
   } catch (error) {
+    console.log("error aya ", error);
     return res.status(500).json({ message: error.message });
   }
 };
@@ -58,17 +67,19 @@ module.exports.getFare = async (req, res) => {
 };
 
 module.exports.confirmRide = async (req, res, next) => {
-  const errors = validationResult(body);
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-
+  console.log("confirmRide me hai : ");
   const { rideId } = req.body;
   try {
     const ride = await rideService.confirmRide({
       rideId,
       captain: req.captain,
     });
+    console.log("ride : ", ride);
+    console.log("suno meri baat uihiljbijw", ride.user.socketId);
     sendMessageToSocketId(ride.user.socketId, {
       event: "ride-confirmed",
       data: ride,

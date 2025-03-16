@@ -41,11 +41,13 @@ const CaptainHome = () => {
     // return () => clearInterval(locationInterval)
   }, []);
   socket.on("new-ride", (data) => {
-    console.log(data);
-    setRide(true);
+    console.log("new-ride mee aya hu data", data);
+    setRide(data);
     setRidePopUpPanel(true);
   });
   async function confirmRide() {
+    console.log("confirm krne jaa rha hi");
+
     const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/rides/confirm`,
       {
@@ -58,6 +60,7 @@ const CaptainHome = () => {
         },
       }
     );
+    console.log("hua kya confirm");
     setRidePopUpPanel(false);
     setConfirmedRidePopUpPanel(true);
   }

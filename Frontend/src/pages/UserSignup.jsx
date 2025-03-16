@@ -33,7 +33,7 @@ const UserSignup = () => {
         const data = response.data;
         setUser(data.user);
         localStorage.setItem("token", data.token);
-        navigate("/login");
+        navigate("/home");
       }
     } catch (error) {
       console.error("Signup failed:", error);

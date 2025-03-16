@@ -17,16 +17,20 @@ const getAddressCoordinates = async (address) => {
         location_type: "APPROXIMATE",
       },
       headers: {
-        "x-rapidapi-key": "1b50c68d2cmsha8692b8438e3a26p167c82jsn01d33b01cd37",
+        "x-rapidapi-key": "0b4d48ead1msh810af415b49c375p16878bjsn7cc4ddc7bfe1",
         "x-rapidapi-host": "google-map-places.p.rapidapi.com",
       },
     };
-    console.log("yaha aya 1");
+    console.log("getAddressCoordinates me hu");
     const response = await axios.request(options);
     // console.log("Response from Google Maps API:", response.data);
 
     if (response.data.status === "OK") {
-      return response.data.results[0].geometry.location; // ✅ Only return data
+      const location = response.data.results[0].geometry.location;
+      return {
+        ltd: location.lat,
+        lng: location.lng,
+      };
     } else {
       throw new Error("Coordinates not found");
     }
@@ -48,9 +52,9 @@ const getDistanceTime = async (origin, destination) => {
     method: "GET",
     url: "https://trueway-matrix.p.rapidapi.com/CalculateDrivingMatrix",
     params: {
-      origins: originCoordinates.lat + "," + originCoordinates.lng,
+      origins: originCoordinates.ltd + "," + originCoordinates.lng,
       destinations:
-        destinationCoordinates.lat + "," + destinationCoordinates.lng,
+        destinationCoordinates.ltd + "," + destinationCoordinates.lng,
     },
     headers: {
       "x-rapidapi-key": "1b50c68d2cmsha8692b8438e3a26p167c82jsn01d33b01cd37",
@@ -87,7 +91,7 @@ const getAutoCompleteSuggestions = async (input) => {
       input: input,
     },
     headers: {
-      "x-rapidapi-key": "1b50c68d2cmsha8692b8438e3a26p167c82jsn01d33b01cd37",
+      "x-rapidapi-key": "0b4d48ead1msh810af415b49c375p16878bjsn7cc4ddc7bfe1",
       "x-rapidapi-host": "google-map-places.p.rapidapi.com",
     },
   };
@@ -107,7 +111,9 @@ const getAutoCompleteSuggestions = async (input) => {
   }
 };
 const getCaptainsInTheRadius = async (ltd, lng, radius) => {
-  // Here radius is in Km
+  // here radius in KM
+  console.log("ltd", ltd, "lng", lng, "radius", radius);
+
   const captains = await captainModel.find({
     location: {
       $geoWithin: {
@@ -115,10 +121,12 @@ const getCaptainsInTheRadius = async (ltd, lng, radius) => {
       },
     },
   });
+  console.log("getCaptainsInTheRadius : ", getCaptainsInTheRadius);
   return captains;
 };
 module.exports = {
   getAddressCoordinates,
   getDistanceTime,
   getAutoCompleteSuggestions,
+  getCaptainsInTheRadius,
 };

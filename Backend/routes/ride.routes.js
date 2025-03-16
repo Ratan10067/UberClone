@@ -37,22 +37,17 @@ router.get(
 
 router.post(
   "/confirm",
-  [
-    body("riderId").isMongoId().withMessage("Invalid ride Id"),
-    body("otp")
-      .isString()
-      .isLength({ min: 6, max: 6 })
-      .withMessage("Invalid otp"),
-  ],
   authMiddleware.authCaptain,
+  body("rideId").isMongoId().withMessage("Invalid ride id"),
   rideController.confirmRide
 );
+
 router.get(
   "/start-ride",
   authMiddleware.authCaptain,
   [
     query("rideId").isMongoId().withMessage("Invalid Ride Id"),
-    query("otp").isString().withMessage("Invalid otp"),
+    query("otp").isString().withMessage("Invalid1234 otp"),
   ],
   rideController.startRide
 );

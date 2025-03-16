@@ -64,6 +64,7 @@ module.exports.createRide = async ({
   if (!user || !pickup || !destination || !vehicleType) {
     throw new Error("All Fields are Required");
   }
+  console.log(user, pickup, destination, vehicleType);
   const fare = await getFare(pickup, destination);
   console.log("Fare:", fare);
   const ride = rideModel.create({
@@ -77,14 +78,20 @@ module.exports.createRide = async ({
 };
 
 module.exports.confirmRide = async ({ rideId, captain }) => {
-  if (!rideId) throw new Error("Ride Id is Required");
+  if (!rideId) {
+    throw new Error("Ride id is required");
+  }
+
   await rideModel.findOneAndUpdate(
-    { _id: rideId },
+    {
+      _id: rideId,
+    },
     {
       status: "accepted",
       captain: captain._id,
     }
   );
+
   const ride = await rideModel
     .findOne({
       _id: rideId,
@@ -92,7 +99,11 @@ module.exports.confirmRide = async ({ rideId, captain }) => {
     .populate("user")
     .populate("captain")
     .select("+otp");
-  if (!ride) throw new error("ride not found");
+
+  if (!ride) {
+    throw new Error("Ride not found");
+  }
+
   return ride;
 };
 
@@ -112,10 +123,10 @@ module.exports.startRide = async ({ rideId, otp, captain }) => {
     throw new Error("All fields are required");
   }
 
+  console.log("ride data bhai suno", ride);
   if (ride.status !== "accepted") {
     throw new Error("Ride not accepted");
   }
-
   if (ride.otp !== otp) {
     throw new Error("Invalid Otp");
   }

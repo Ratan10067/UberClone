@@ -40,7 +40,7 @@ const LookingForDriver = ({
           <div className="flex items-center gap-5 p-3 ">
             <i className="ri-cash-fill"></i>
             <div>
-              <h3 className="text-lg font-medium">₹{fare.vehicleType}</h3>
+              <h3 className="text-lg font-medium">₹{fare[vehicleType]}</h3>
               <p className="text-base text-gray-700">Cash</p>
             </div>
           </div>

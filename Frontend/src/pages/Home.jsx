@@ -38,10 +38,12 @@ const Home = () => {
     e.preventDefault();
   };
   useEffect(() => {
-    socket.emit("join", { userType: "user", userId: user._id });
+    socket.emit("join", { userType: "user", userId: user.user._id });
   }, [user]);
-  socket.on("");
+  // socket.on("");
   socket.on("ride-confirmed", (ride) => {
+    console.log("hm socket me hai");
+
     setVehicleFound(false);
     setWaitingForDriver(true);
     setRide(ride);
@@ -108,12 +110,13 @@ const Home = () => {
   const createRide = async function () {
     setVehiclePanel(false);
     setConfirmedRidePanel(true);
+    console.log("janne wala hu");
     const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/rides/create-ride`,
+      `${import.meta.env.VITE_BASE_URL}/rides/create`,
       {
-        pickUp,
-        destination,
-        vehicleType,
+        pickup: pickUp,
+        destination: destination,
+        vehicleType: vehicleType,
       },
       {
         headers: {
@@ -121,6 +124,7 @@ const Home = () => {
         },
       }
     );
+    console.log("chala gya hai");
     console.log(response);
     setVehicleFound(true);
   };
